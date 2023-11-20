@@ -19,3 +19,40 @@ function selectAll(selector,parent = document){
 function create(element,parent=document){
     return parent.createElement(element);
 }
+
+const clock = select('.clock');
+const hour = selectById('hour');
+const minute = selectById('minute');
+const btnAlarm = selectById('btn-alarm');
+const mydate = new Date();
+const alarm = selectById('alarm');
+const alarmSong = new Audio('./assets/audio/alarm_clock_beeps.mp3');
+
+clock.innerHTML = mydate.toTimeString().substring(0,5);
+setInterval(function(){
+    const mydate = new Date();
+    
+    clock.innerHTML = mydate.toTimeString().substring(0,5);
+
+    if(mydate.toTimeString().substring(0,5) == alarm.innerHTML){
+        alarmSong.play();
+    }
+},10_000);
+
+onEvent('keyup', hour, function(event){
+    if(!(event.target.value.trim()>=0 && event.target.value.trim()<24)) {
+        event.target.value = '';
+        event.target.focus();
+    }
+});
+
+onEvent('keyup', minute, function(event){
+    if(!(event.target.value.trim()>=0 && event.target.value.trim()<60)) {
+        event.target.value = '';
+        event.target.focus();
+    }
+});
+
+onEvent('click', btnAlarm, function(event){
+    alarm.innerHTML = hour.value.toString().padStart(2, '0') + ":" + minute.value.toString().padStart(2, '0');
+});
